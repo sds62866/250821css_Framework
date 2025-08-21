@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gemini 홈쇼핑</title>
+    <!-- Bootstrap CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <style>
+      /* 기본 스타일 및 폰트 설정 */
+      body {
+        font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+          Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
+          "Noto Sans KR", "Malgun Gothic", sans-serif;
+        background-color: #f8f9fa; /* 전체 배경색을 부드럽게 처리 */
+      }
+
+      /* 섹션별 여백 통일 */
+      .section-padding {
+        padding: 4rem 0;
+      }
+
+      /* 상품 카드 커스텀 스타일 */
+      .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        border-radius: 15px;
+        overflow: hidden; /* 이미지 모서리도 둥글게 처리 */
+      }
+
+      .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-title {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .card-text {
+        color: #555;
+      }
+
+      .price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #e53935; /* 강조색 */
+      }
+
+      .original-price {
+        text-decoration: line-through;
+        color: #aaa;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+      }
+    </style>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./favicon-16x16.png"
+    />
+    <link rel="manifest" href="./site.webmanifest" />
+  </head>
+  <body>
+    <!-- 
+      Header (내비게이션 바)
+      - `navbar`: 부트스트랩의 핵심 내비게이션 컴포넌트입니다.
+      - `navbar-expand-lg`: 화면이 large 사이즈 이상일 때 메뉴를 펼칩니다. (데스크탑 중심 반응형)
+      - `bg-light`, `shadow-sm`: 배경색과 부드러운 그림자 효과를 줍니다.
+      - `fixed-top`: 화면 상단에 고정되어 스크롤해도 항상 보입니다.
+    -->
+    <header class="p-3 mb-3 border-bottom bg-light shadow-sm fixed-top">
+      <div class="container">
+        <!-- 
+              d-flex, flex-wrap, align-items-center, justify-content-center, justify-content-lg-start
+              - Flexbox 유틸리티 클래스입니다.
+              - `d-flex`: Flexbox 레이아웃을 활성화합니다.
+              - `align-items-center`: 아이템들을 수직 중앙 정렬합니다.
+              - `justify-content-center`: 모바일 화면에서는 중앙 정렬합니다.
+              - `justify-content-lg-start`: large 사이즈 이상 화면에서는 왼쪽부터 정렬합니다.
+            -->
+        <div
+          class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+        >
+          <a
+            href="/"
+            class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+          >
+            <!-- Bootstrap Icon과 사이트 로고 -->
+            <i class="bi bi-gem fs-2 me-2"></i>
+            <span class="fs-4 fw-bold">Gemini쇼핑</span>
+          </a>
+
+          <!-- 
+                  nav, col-12, col-lg-auto, me-lg-auto, mb-2, justify-content-center, mb-md-0
+                  - Flexbox와 Grid 시스템을 활용한 메뉴 구성입니다.
+                  - `me-lg-auto`: large 사이즈 이상에서 남은 공간을 모두 차지하여 오른쪽 아이템들을 밀어냅니다. (가장 중요한 flex 속성 중 하나)
+                -->
+          <ul
+            class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+          >
+            <li><a href="#" class="nav-link px-2 link-secondary">특가</a></li>
+            <li><a href="#" class="nav-link px-2 link-dark">베스트</a></li>
+            <li><a href="#" class="nav-link px-2 link-dark">라이브</a></li>
+            <li><a href="#" class="nav-link px-2 link-dark">기획전</a></li>
+          </ul>
+
+          <!-- 검색 폼 -->
+          <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+            <input
+              type="search"
+              class="form-control"
+              placeholder="상품 검색..."
+              aria-label="Search"
+            />
+          </form>
+
+          <!-- 
+                  오른쪽 사용자 메뉴 (아이콘)
+                  - `dropdown`: 클릭 시 메뉴가 펼쳐지는 드롭다운 컴포넌트입니다.
+                  - `text-end`: 텍스트를 오른쪽으로 정렬합니다.
+                -->
+          <div class="text-end d-flex align-items-center">
+            <a href="#" class="nav-link px-2 link-dark"
+              ><i class="bi bi-cart fs-4"></i
+            ></a>
+            <div class="dropdown">
+              <a
+                href="#"
+                class="d-block link-dark text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-person-circle fs-4"></i>
+              </a>
+              <ul class="dropdown-menu text-small">
+                <li><a class="dropdown-item" href="#">마이페이지</a></li>
+                <li><a class="dropdown-item" href="#">주문조회</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="#">로그아웃</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 
+      Main Content
+      - `style="padding-top: 80px;"`: 상단에 고정된 헤더의 높이만큼 패딩을 주어 내용이 가려지지 않게 합니다.
+    -->
+    <main style="padding-top: 80px">
+      <!-- 
+          메인 캐러셀 (슬라이드 배너)
+          - `carousel`, `slide`: 부트스트랩의 슬라이드 쇼 컴포넌트입니다.
+          - `data-bs-ride="carousel"`: 페이지 로드 시 자동으로 슬라이드를 시작합니다.
+        -->
+      <section id="main-carousel" class="mb-5">
+        <div
+          id="carouselExampleCaptions"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-indicators">
+            <button
+              type="button"
+              data-bs-target="#carouselExampleCaptions"
+              data-bs-slide-to="0"
+              class="active"
+              aria-current="true"
+              aria-label="Slide 1"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleCaptions"
+              data-bs-slide-to="1"
+              aria-label="Slide 2"
+            ></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <!-- 이미지 플레이스홀더 사용 -->
+              <img
+                src="https://via.placeholder.com/1920x600/E9ECEF/6C757D.png?text=Summer+Special"
+                class="d-block w-100"
+                alt="여름 특별 세일"
+              />
+              <div class="carousel-caption d-none d-md-block text-start">
+                <h1 class="display-4 fw-bold">시원한 여름 준비!</h1>
+                <p class="lead">
+                  최대 50% 할인! 여름 필수 아이템을 지금 만나보세요.
+                </p>
+                <a href="#" class="btn btn-primary btn-lg">자세히 보기</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img
+                src="https://via.placeholder.com/1920x600/343A40/FFFFFF.png?text=New+Arrivals"
+                class="d-block w-100"
+                alt="신상품"
+              />
+              <div class="carousel-caption d-none d-md-block text-end">
+                <h1 class="display-4 fw-bold">가장 먼저 만나는 신상</h1>
+                <p class="lead">새로운 시즌, 새로운 스타일을 제안합니다.</p>
+                <a href="#" class="btn btn-success btn-lg">쇼핑하기</a>
+              </div>
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleCaptions"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleCaptions"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 
+          추천 상품 섹션
+          - `container`: 콘텐츠를 중앙에 위치시키고 적절한 여백을 주는 컨테이너입니다.
+          - `text-center`: 텍스트를 중앙 정렬합니다.
+        -->
+      <section id="featured-products" class="container section-padding">
+        <h2 class="text-center fw-bold mb-5">이 상품 어때요?</h2>
+        <!-- 
+              Grid System
+              - `row`: 컬럼(column)들을 담는 컨테이너입니다. Flexbox 기반으로 작동합니다.
+              - `col-md-6 col-lg-3`: 중간 화면(md)에서는 2개, 큰 화면(lg)에서는 4개의 상품이 한 줄에 보이도록 설정합니다.
+              - `g-4`: 컬럼 사이의 간격(gutter)을 설정합니다.
+            -->
+        <div class="row g-4">
+          <!-- 상품 카드 1 -->
+          <div class="col-md-6 col-lg-3">
+            <!-- 
+                      Card 컴포넌트
+                      - `card`, `h-100`: 카드 디자인을 적용하고, 높이를 100%로 통일하여 같은 줄의 카드들이 같은 높이를 갖게 합니다.
+                    -->
+            <div class="card h-100 product-card">
+              <img
+                src="https://via.placeholder.com/300x300/ADB5BD/FFFFFF.png?text=Product+1"
+                class="card-img-top"
+                alt="상품 이미지"
+              />
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">편안한 착용감! 데일리 밴딩 팬츠</h5>
+                <p class="card-text text-muted small">
+                  어디에나 잘 어울리는 기본 아이템
+                </p>
+                <div class="mt-auto">
+                  <span class="price">29,900원</span>
+                  <span class="original-price">45,000원</span>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent border-top-0">
+                <a href="#" class="btn btn-primary w-100"
+                  ><i class="bi bi-cart-plus me-2"></i>장바구니 담기</a
+                >
+              </div>
+            </div>
+          </div>
+          <!-- 상품 카드 2 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 product-card">
+              <img
+                src="https://via.placeholder.com/300x300/6C757D/FFFFFF.png?text=Product+2"
+                class="card-img-top"
+                alt="상품 이미지"
+              />
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">프리미엄 원두 커피 200g</h5>
+                <p class="card-text text-muted small">
+                  깊고 풍부한 아로마를 느껴보세요.
+                </p>
+                <div class="mt-auto">
+                  <span class="price">12,500원</span>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent border-top-0">
+                <a href="#" class="btn btn-primary w-100"
+                  ><i class="bi bi-cart-plus me-2"></i>장바구니 담기</a
+                >
+              </div>
+            </div>
+          </div>
+          <!-- 상품 카드 3 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 product-card">
+              <img
+                src="https://via.placeholder.com/300x300/CED4DA/343A40.png?text=Product+3"
+                class="card-img-top"
+                alt="상품 이미지"
+              />
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">초경량 블루투스 이어폰</h5>
+                <p class="card-text text-muted small">
+                  선명한 음질과 완벽한 노이즈 캔슬링
+                </p>
+                <div class="mt-auto">
+                  <span class="price">89,000원</span>
+                  <span class="original-price">120,000원</span>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent border-top-0">
+                <a href="#" class="btn btn-primary w-100"
+                  ><i class="bi bi-cart-plus me-2"></i>장바구니 담기</a
+                >
+              </div>
+            </div>
+          </div>
+          <!-- 상품 카드 4 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 product-card">
+              <img
+                src="https://via.placeholder.com/300x300/F8F9FA/343A40.png?text=Product+4"
+                class="card-img-top"
+                alt="상품 이미지"
+              />
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">유기농 ABC 주스 30팩</h5>
+                <p class="card-text text-muted small">
+                  건강을 위한 하루 한 잔의 습관
+                </p>
+                <div class="mt-auto">
+                  <span class="price">35,000원</span>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent border-top-0">
+                <a href="#" class="btn btn-primary w-100"
+                  ><i class="bi bi-cart-plus me-2"></i>장바구니 담기</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 
+      Footer
+      - `bg-dark`, `text-white`: 어두운 배경색과 흰색 텍스트 색상을 지정합니다.
+      - `py-5`: 위아래로 충분한 패딩(padding)을 줍니다.
+    -->
+    <footer class="bg-dark text-white py-5">
+      <div class="container">
+        <!-- 
+              Flexbox를 이용한 푸터 레이아웃
+              - `justify-content-between`: 아이템들 사이에 균일한 간격을 만듭니다.
+            -->
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <h5 class="fw-bold">Gemini쇼핑</h5>
+            <p class="text-muted">고객센터: 1588-0000 (평일 09:00 ~ 18:00)</p>
+            <p class="text-muted">
+              대표: 김제미니 | 사업자등록번호: 123-45-67890
+            </p>
+            <p class="text-muted">주소: 서울특별시 강남구 테헤란로</p>
+          </div>
+          <div class="col-6 col-md-2 mb-3">
+            <h5>회사소개</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-muted">About us</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-muted">채용</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-6 col-md-2 mb-3">
+            <h5>이용안내</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-muted">이용약관</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-muted">개인정보처리방침</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5 class="fw-bold">Follow Us</h5>
+            <!-- 소셜 미디어 아이콘 -->
+            <a href="#" class="text-white me-3 fs-4"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="text-white me-3 fs-4"
+              ><i class="bi bi-youtube"></i
+            ></a>
+            <a href="#" class="text-white fs-4"
+              ><i class="bi bi-facebook"></i
+            ></a>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between pt-4 mt-4 border-top">
+          <p class="text-muted">
+            &copy; 2024 Gemini Shopping, Inc. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle (Popper.js 포함) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
